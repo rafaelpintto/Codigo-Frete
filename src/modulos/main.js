@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const sleep = require('sleep');
 const bd = require('../modulos/bd'); // database
-const fc = require('./function') // functions
+const fc = require('../modulos/function') // functions
 
 (async() => {
     var browser = await puppeteer.launch({ headless: true });
