@@ -1,0 +1,25 @@
+{
+  "name": "clawler-fretebras",
+  "version": "1.0.0",
+  "description": "This crawler is designed to get info from fretebras (site of trucker freight).",
+  "main": "src/start.js",
+  "keywords": [],
+  "author": "LuizFelipeNeves",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LuizFelipeNeves/clawler-fretebras"
+  },
+  "scripts": {
+    "start": "node src/start.js"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "messaging-api-telegram": "^0.7.11",
+    "mongoose": "^5.4.15",
+    "mongoose-sequence": "^5.0.1",
+    "puppeteer": "^1.12.2",
+    "sleep": "^6.0.0"
+  }
+}
