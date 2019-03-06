@@ -43,7 +43,7 @@ async function checkIP(page) {
 
 async function getinfo(url, page) {
     try {
-        await console.log(url)
+        await console.log('g', url)
         await page.goto(url);
         // image, empresa, produto
         const info = await page.evaluate((url) => {
