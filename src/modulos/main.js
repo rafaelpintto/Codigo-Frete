@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const sleep = require('sleep');
 const bd = require('../modulos/bd'); // database
-const fc = require('../modulos/function') // functions
 
 (async() => {
     var browser = await puppeteer.launch({ headless: true });
@@ -11,7 +10,7 @@ const fc = require('../modulos/function') // functions
 })();
 
 async function listLinks(url, page) {   
-    await fc.debug('l', url);
+    await console.log('l', url);
     await page.goto(url);
 
     const base = 'https://www.fretebras.com.br';   
@@ -44,7 +43,7 @@ async function checkIP(page) {
 
 async function getinfo(url, page) {
     try {
-        await fc.debug('g', url)
+        await console.log('g', url)
         await page.goto(url);
         // image, empresa, produto
         const info = await page.evaluate((url) => {
