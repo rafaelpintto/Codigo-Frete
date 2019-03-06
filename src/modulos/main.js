@@ -20,6 +20,7 @@ async function listLinks(url, page) {
         if (await page.$('.lista-pg-prox.dis') === null) {
             const filtro = await page.evaluate(base => Array.from( document.querySelectorAll('div#corpo-lista-pg > a'), (element => base + element.getAttribute('href'))), base);
             next = await filtro.reverse()[0];
+            if(await next === undefined) next = 'https://www.fretebras.com.br/fretes';
         }
         
         const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
