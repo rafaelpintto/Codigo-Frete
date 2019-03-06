@@ -81,5 +81,5 @@ async function getinfo(url, page) {
     catch (error) { 
         await console.log('deu ruim',url, error); 
     }
-    await sleep.sleep(2);
+    await sleep.sleep(3);
 }
