@@ -3,7 +3,7 @@ const sleep = require('sleep');
 const bd = require('../modulos/bd'); // database
 
 (async() => {
-    var browser = await puppeteer.launch({ headless: false });
+    var browser = await puppeteer.launch({ headless: true });
     var page = await browser.newPage();  
     await listLinks('https://www.fretebras.com.br/fretes', page);
     await browser.close();
@@ -43,6 +43,7 @@ async function checkIP(page) {
 
 async function getinfo(url, page) {
     try {
+        await console.log(url)
         await page.goto(url);
         // image, empresa, produto
         const info = await page.evaluate((url) => {
