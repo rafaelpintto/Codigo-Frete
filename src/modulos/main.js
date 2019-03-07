@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const sleep = require('sleep');
+const Heroku = require('heroku-client');
 const bd = require('../modulos/bd'); // database
 
 (async() => {
@@ -10,29 +11,38 @@ const bd = require('../modulos/bd'); // database
 })();
 
 async function listLinks(url, page) {
-    await console.log('l', url);
-    await page.goto(url);
-    if(checkExist)
+    if(url !== undefined)
     {
-        const base = 'https://www.fretebras.com.br';   
-        let next = 'https://www.fretebras.com.br/fretes';
-    
-        if (await page.$('.lista-pg-prox.dis') === null) {
-            const filtro = await page.evaluate(base => Array.from( document.querySelectorAll('div#corpo-lista-pg > a'), (element => base + element.getAttribute('href'))), base);
-            next = await filtro.reverse()[0];
-            if(await next === undefined) next = 'https://www.fretebras.com.br/fretes';
-        }
+        await console.log('l', url);
+        await page.goto(next);
+        if(checkExist)
+        {
+            const base = 'https://www.fretebras.com.br';   
+            let next = 'https://www.fretebras.com.br/fretes';
         
-        const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
-        for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
-    
-        await listLinks(next, page);
+            if (await page.$('.lista-pg-prox.dis') === null) {
+                const filtro = await page.evaluate(base => Array.from( document.querySelectorAll('div#corpo-lista-pg > a'), (element => base + element.getAttribute('href'))), base);
+                next = await filtro.reverse()[0];
+            }
+            
+            const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
+            for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
+        
+            await listLinks(next, page);
+        }
+        else await restartApp();
     }
-    else await console.log('Banimento de IP');
+    else await restartApp();
 }
 
 async function checkExist(page){
     return (await page.$('td > span.style4 > strong') === null);
+}
+
+async function restartApp(){
+    await console.log('Restart App, IP BAN');
+    heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
+    await heroku.delete('/apps/my-old-app', function (err, app) {});
 }
 /*
 async function checkIP(page) {
@@ -77,7 +87,7 @@ async function getinfo(url, page) {
             }, url);
             await bd.Insertdb(info);
         }
-        else await console.log('Banimento de IP');
+        else await restartApp();
     } 
     catch (error) { 
         await console.log('deu ruim',url, error); 
