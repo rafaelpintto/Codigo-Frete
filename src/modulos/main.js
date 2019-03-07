@@ -14,7 +14,7 @@ async function listLinks(url, page) {
     if(url !== undefined)
     {
         await console.log('l', url);
-        await page.goto(next);
+        await page.goto(url);
         if(checkExist)
         {
             const base = 'https://www.fretebras.com.br';   
