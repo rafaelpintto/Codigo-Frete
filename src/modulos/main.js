@@ -57,31 +57,34 @@ async function getinfo(url, page) {
         await page.goto(url);
         if(checkIP){
             // image, empresa, produto
-            const info = await page.evaluate((url) => {
-                const ocidade = document.querySelector('div.origem a.cor-vermelho:nth-of-type(1)').textContent
-                const oestado = document.querySelector('div.origem a.cor-vermelho:nth-of-type(2)').textContent
-                const origem = ocidade + '/' + oestado
-                const dcidade = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
-                const destado = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
-                const destino = dcidade + '/' + destado
-                const km = document.querySelector('.frete-dados.frete-km').textContent
-                let preco = document.querySelector('.frete-dados.frete-preco').textContent
-                const peso = 'N/A';
-                const veiculo = document.querySelector('.frete-dados.frete-veiculos').textContent // loop array
-                
-                const info = {
-                    url,
-                    origem,
-                    destino,
-                    km,
-                    preco,
-                    peso,
-                    veiculo,
-                    site: 'fretebras'
-                }
-                return info;
-            }, url);
-            await bd.Insertdb(info);
+            try {
+                const info = await page.evaluate((url) => {
+                    const ocidade = document.querySelector('div.origem a.cor-vermelho:nth-of-type(1)').textContent
+                    const oestado = document.querySelector('div.origem a.cor-vermelho:nth-of-type(2)').textContent
+                    const origem = ocidade + '/' + oestado
+                    const dcidade = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
+                    const destado = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
+                    const destino = dcidade + '/' + destado
+                    const km = document.querySelector('.frete-dados.frete-km').textContent
+                    let preco = document.querySelector('.frete-dados.frete-preco').textContent
+                    const peso = 'N/A';
+                    const veiculo = document.querySelector('.frete-dados.frete-veiculos').textContent // loop array
+                    
+                    const info = {
+                        url,
+                        origem,
+                        destino,
+                        km,
+                        preco,
+                        peso,
+                        veiculo,
+                        site: 'fretebras'
+                    }
+                    return info;
+                }, url);
+                await bd.Insertdb(info);   
+            } 
+            catch (error) { await restartApp(); }
         }
         else await restartApp();
     } 
