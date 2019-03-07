@@ -4,11 +4,10 @@ const Heroku = require('heroku-client');
 const bd = require('../modulos/bd'); // database
 
 (async() => {
-    /*var browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});  // headless: true
+    var browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});  // headless: true
     var page = await browser.newPage();  
     await listLinks('https://www.fretebras.com.br/fretes', page);
-    await browser.close();*/
-    await restartApp();
+    await browser.close();
 })();
 
 async function listLinks(url, page) {
