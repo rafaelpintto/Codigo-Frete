@@ -28,6 +28,7 @@ async function listLinks(url, page) {
             const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
             for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
         
+            await sleep.sleep(3);
             await listLinks(next, page);
         }
         else await restartApp();
@@ -42,7 +43,7 @@ async function checkExist(page){
 async function restartApp(){
     await console.log('Restart App, IP BAN');
     heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
-    await heroku.delete('/apps/my-old-app', function (err, app) {});
+    await heroku.delete('/apps/clawler-fretebras', function (err, app) {});
 }
 /*
 async function checkIP(page) {
