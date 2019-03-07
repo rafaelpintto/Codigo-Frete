@@ -15,7 +15,7 @@ async function listLinks(url, page) {
     {
         await console.log('l', url);
         await page.goto(url);
-        if(checkExist)
+        if(checkIP)
         {
             const base = 'https://www.fretebras.com.br';   
             let next = 'https://www.fretebras.com.br/fretes';
@@ -35,32 +35,27 @@ async function listLinks(url, page) {
     }
     else await restartApp();
 }
-
+/*
 async function checkExist(page){
     return (await page.$('td > span.style4 > strong') === null);
 }
+*/
 
 async function restartApp(){
     await console.log('Restart App, IP BAN');
     heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
-    await heroku.delete('/apps/clawler-fretebras', function (err, app) {});
+    await heroku.apps('clawler-fretebras').dynos().restartAll();
 }
-/*
+
 async function checkIP(page) {
-    let status = await page.$('.dialog p') === null
-    if(!status){ 
-        await console.log('Use Proxy');
-        await sleep.sleep(300);
-    }
-    return status    
+    return (await page.$('td > span.style4 > strong') === null);
 }
-*/
 
 async function getinfo(url, page) {
     try {
         await console.log('g', url);
         await page.goto(url);
-        if(checkExist){
+        if(checkIP){
             // image, empresa, produto
             const info = await page.evaluate((url) => {
                 const ocidade = document.querySelector('div.origem a.cor-vermelho:nth-of-type(1)').textContent
