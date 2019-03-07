@@ -4,10 +4,11 @@ const Heroku = require('heroku-client');
 const bd = require('../modulos/bd'); // database
 
 (async() => {
-    var browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});  // headless: true
+    /*var browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});  // headless: true
     var page = await browser.newPage();  
     await listLinks('https://www.fretebras.com.br/fretes', page);
-    await browser.close();
+    await browser.close();*/
+    await restartApp();
 })();
 
 async function listLinks(url, page) {
@@ -43,8 +44,10 @@ async function checkExist(page){
 
 async function restartApp(){
     await console.log('Restart App, IP BAN');
-    heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
-    await heroku.apps('clawler-fretebras').dynos().restartAll();
+    
+    var appName = 'clawler-fretebras';
+    var heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
+    await heroku.delete('/apps/' + appName + '/dynos/');
 }
 
 async function checkIP(page) {
