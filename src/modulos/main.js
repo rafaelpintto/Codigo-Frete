@@ -35,7 +35,7 @@ async function listLinks(url, page) {
             const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
             for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
         
-            await sleep.sleep(8);
+            await sleep.sleep(10);
             await listLinks(next, page);
         }
         else await restartApp();
@@ -101,5 +101,5 @@ async function getinfo(url, page) {
     catch (error) { 
         await console.log('deu ruim',url, error); 
     }
-    await sleep.sleep(8);
+    await sleep.sleep(10);
 }
