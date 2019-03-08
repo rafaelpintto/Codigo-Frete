@@ -25,6 +25,7 @@
     "mongoose": "^5.4.15",
     "mongoose-sequence": "^5.0.1",
     "puppeteer": "^1.12.2",
-    "sleep": "^6.0.0"
+    "sleep": "^6.0.0",
+    "user-agents": "^1.0.188"
   }
 }

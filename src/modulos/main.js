@@ -1,14 +1,19 @@
 const puppeteer = require('puppeteer');
 const sleep = require('sleep');
 const Heroku = require('heroku-client');
+const UserAgent = require('user-agents');
 const bd = require('../modulos/bd'); // database
 
+
+
 (async() => {
-    var browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});  // headless: true
+    var browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });  // headless: true
     var page = await browser.newPage();
-    await page.setViewport({width: 320, height: 600})
-    await page.setUserAgent('Mozilla/5.0 (iPhone; CPU iPhone OS 9_0_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A404 Safari/601.1')
-  
+    //await page.setViewport({width: 320, height: 600})
+    const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
+    await page.setUserAgent(userAgent.toString());
+    //await page.setUserAgent('Mozilla/5.0 (PlayStation 4 5.55) AppleWebKit/601.2 (KHTML, like Gecko)')
+    await console.log(userAgent.toString());
     await listLinks('https://www.fretebras.com.br/fretes', page);
     await browser.close();
 })();
