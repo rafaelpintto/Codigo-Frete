@@ -4,19 +4,15 @@ const Heroku = require('heroku-client');
 const UserAgent = require('user-agents');
 const bd = require('../modulos/bd'); // database
 
-
-
 (async() => {
     var browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });  // headless: true
     var page = await browser.newPage();
-    //await page.setViewport({width: 320, height: 600})
     await listLinks('https://www.fretebras.com.br/fretes', page);
     await browser.close();
 })();
 
 async function antBot(page){
     const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
-    //await page.setUserAgent('Mozilla/5.0 (PlayStation 4 5.55) AppleWebKit/601.2 (KHTML, like Gecko)')
     await page.setUserAgent(userAgent.toString());
     return await page;
 }
@@ -40,7 +36,7 @@ async function listLinks(url, page) {
             const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
             for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
         
-            await sleep.sleep(10);
+            await sleep.sleep(5);
             await listLinks(next, page);
         }
         else await restartApp();
@@ -106,5 +102,5 @@ async function getinfo(url, page) {
     catch (error) { 
         await console.log('deu ruim',url, error); 
     }
-    await sleep.sleep(10);
+    await sleep.sleep(5);
 }
