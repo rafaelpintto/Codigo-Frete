@@ -10,17 +10,20 @@ const bd = require('../modulos/bd'); // database
     var browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });  // headless: true
     var page = await browser.newPage();
     //await page.setViewport({width: 320, height: 600})
-    const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
-    await page.setUserAgent(userAgent.toString());
-    //await page.setUserAgent('Mozilla/5.0 (PlayStation 4 5.55) AppleWebKit/601.2 (KHTML, like Gecko)')
-    await console.log(userAgent.toString());
     await listLinks('https://www.fretebras.com.br/fretes', page);
     await browser.close();
 })();
 
+async function antBot(page){
+    const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
+    //await page.setUserAgent('Mozilla/5.0 (PlayStation 4 5.55) AppleWebKit/601.2 (KHTML, like Gecko)')
+    return await page.setUserAgent(userAgent.toString());
+}
+
 async function listLinks(url, page) {
     if(url !== undefined)
     {
+        page = await antBot(page);
         await console.log('l', url);
         await page.goto(url);
         if(checkIP)
@@ -63,6 +66,7 @@ async function checkIP(page) {
 
 async function getinfo(url, page) {
     try {
+        page = await antBot(page);
         await console.log('g', url);
         await page.goto(url);
         if(checkIP){
