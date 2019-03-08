@@ -64,7 +64,7 @@ async function checkIP(page) {
 async function getinfo(url, page) {
     try {
         page = await antBot(page);
-        await console.log('g', url);
+        //await console.log('g', url);
         await page.goto(url);
         if(checkIP){
             // image, empresa, produto
