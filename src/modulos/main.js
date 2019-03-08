@@ -4,12 +4,11 @@ const Heroku = require('heroku-client');
 const UserAgent = require('user-agents');
 const bd = require('../modulos/bd'); // database
 
-(async() => {
-    var browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });  // headless: true
-    var page = await browser.newPage();
+puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => { // headless: false
+    const page = await browser.newPage();
     await listLinks('https://www.fretebras.com.br/fretes', page);
     await browser.close();
-})();
+});
 
 async function antBot(page){
     const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
@@ -52,8 +51,8 @@ async function checkExist(page){
 async function restartApp(){
     await console.log('Restart App, IP BAN');
     
-    var appName = 'clawler-fretebras';
-    var heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
+    const appName = 'clawler-fretebras';
+    const heroku = await new Heroku({ token: process.env.HEROKU_API_TOKEN });
     await heroku.delete('/apps/' + appName + '/dynos/');
 }
 
