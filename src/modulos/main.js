@@ -17,7 +17,8 @@ const bd = require('../modulos/bd'); // database
 async function antBot(page){
     const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
     //await page.setUserAgent('Mozilla/5.0 (PlayStation 4 5.55) AppleWebKit/601.2 (KHTML, like Gecko)')
-    return await page.setUserAgent(userAgent.toString());
+    await page.setUserAgent(userAgent.toString());
+    return await page;
 }
 
 async function listLinks(url, page) {
