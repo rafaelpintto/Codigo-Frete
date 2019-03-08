@@ -17,7 +17,7 @@ async function listLinks(url, page) {
     if(url !== undefined)
     {
         await console.log('l', url);
-        await page.goto(url, {waitUntil: 'networkidle0'});
+        await page.goto(url);
         if(checkIP)
         {
             const base = 'https://www.fretebras.com.br';   
@@ -31,7 +31,7 @@ async function listLinks(url, page) {
             const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
             for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
         
-            await sleep.sleep(20);
+            await sleep.sleep(10);
             await listLinks(next, page);
         }
         else await restartApp();
@@ -59,7 +59,7 @@ async function checkIP(page) {
 async function getinfo(url, page) {
     try {
         await console.log('g', url);
-        await page.goto(url, {waitUntil: 'networkidle0'});
+        await page.goto(url);
         if(checkIP){
             // image, empresa, produto
             try {
@@ -96,5 +96,5 @@ async function getinfo(url, page) {
     catch (error) { 
         await console.log('deu ruim',url, error); 
     }
-    await sleep.sleep(20);
+    await sleep.sleep(10);
 }
