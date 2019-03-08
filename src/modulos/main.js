@@ -17,7 +17,7 @@ async function listLinks(url, page) {
     if(url !== undefined)
     {
         await console.log('l', url);
-        await page.goto(url);
+        await page.goto(url, {waitUntil: 'networkidle0'});
         if(checkIP)
         {
             const base = 'https://www.fretebras.com.br';   
@@ -59,7 +59,7 @@ async function checkIP(page) {
 async function getinfo(url, page) {
     try {
         await console.log('g', url);
-        await page.goto(url);
+        await page.goto(url, {waitUntil: 'networkidle0'});
         if(checkIP){
             // image, empresa, produto
             try {
