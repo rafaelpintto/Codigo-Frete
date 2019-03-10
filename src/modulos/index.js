@@ -11,6 +11,5 @@ app.get('/', function(req, res){
 
 app.listen((process.env.PORT || 5002));
 fc.debug('Clawler-FreteBras on port: ' + (process.env.PORT || 5002));
-fc.debug('Start: ' + fc.time())
 exports = module.exports = app;
 
