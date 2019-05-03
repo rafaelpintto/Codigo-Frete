@@ -69,25 +69,27 @@ async function getinfo(url, page) {
             // image, empresa, produto
             try {
                 const info = await page.evaluate((url) => {
-                    const ocidade = document.querySelector('div.origem a.cor-vermelho:nth-of-type(1)').textContent
-                    const oestado = document.querySelector('div.origem a.cor-vermelho:nth-of-type(2)').textContent
-                    const origem = ocidade + '/' + oestado
-                    const dcidade = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
-                    const destado = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
-                    const destino = dcidade + '/' + destado
+                    const cidadeorigem = document.querySelector('div.origem a.cor-vermelho:nth-of-type(1)').textContent
+                    const cidadedestino = document.querySelector('div.destino a.cor-vermelho:nth-of-type(1)').textContent
+                    const estadoorigem = document.querySelector('div.origem a.cor-vermelho:nth-of-type(2)').textContent
+                    const estadodestino = document.querySelector('div.destino a.cor-vermelho:nth-of-type(2)').textContent
                     const km = document.querySelector('.frete-dados.frete-km').textContent
-                    let preco = document.querySelector('.frete-dados.frete-preco').textContent
+                    const preco = document.querySelector('.frete-dados.frete-preco').textContent
                     const peso = 'N/A';
-                    const veiculo = document.querySelector('.frete-dados.frete-veiculos').textContent // loop array
-                    
+                    const veiculo = document.querySelector('.frete-dados.frete-veiculos').textContent.split(/[,|\s]+/g)
+                    const carroceria = document.querySelector('.frete-dados.frete-carrocerias').textContent.split(/[,|\s]+/g)
+
                     const info = {
                         url,
-                        origem,
-                        destino,
+                        cidadeorigem,
+                        cidadedestino,
+                        estadoorigem,
+                        estadodestino,
                         km,
                         preco,
                         peso,
                         veiculo,
+                        carroceria,
                         site: 'fretebras'
                     }
                     return info;
