@@ -8,12 +8,15 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const FreteSchema = new mongoose.Schema({
   _id: Number,
   url: String,
-  origem: String,
-  destino: String,
+  cidadeorigem: String,
+  cidadedestino: String,
+  estadoorigem: String,
+  estadodestino: String,
   km: String,
   preco: String,
   peso: String,
-  veiculo: String,
+  veiculo: [{type: String}],
+  carroceria: [{type: String}],
   site: String
 }, { _id: false, timestamps: { createdAt: 'created_at' } });
 
