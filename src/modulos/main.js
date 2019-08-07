@@ -4,24 +4,32 @@ const Heroku = require('heroku-client');
 const UserAgent = require('user-agents');
 const bd = require('../modulos/bd'); // database
 
-puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }).then(async browser => { // headless: false
+puppeteer.launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=127.0.0.1:5566', '--disable-dev-shm-usage', '--enable-features=NetworkService', '--ignore-certificate-errors'] }).then(async browser => { // headless: false
     const page = await browser.newPage();
+    await page.setRequestInterception(true);
+        await page.on('request', (request) => {
+            if (['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1) {
+              request.abort();
+            } else {
+              request.continue();
+            }
+        });
     await listLinks('https://www.fretebras.com.br/fretes', page);
     await browser.close();
 });
 
-async function antBot(page){
+async function antBot(url, page){
     const userAgent = await new UserAgent({ deviceCategory: 'desktop'});
     await page.setUserAgent(userAgent.toString());
+    await page.goto(url, { waitUntil: 'load', timeout: 0 });
     return await page;
 }
 
 async function listLinks(url, page) {
     if(url !== undefined)
     {
-        page = await antBot(page);
+        page = await antBot(url, page);
         await console.log('l', url);
-        await page.goto(url);
         if(checkIP)
         {
             const base = 'https://www.fretebras.com.br';   
@@ -35,7 +43,7 @@ async function listLinks(url, page) {
             const links = await page.evaluate(base => Array.from( document.querySelectorAll( '.col5-quadro-imagem a' ), (element => base + '/' + element.getAttribute('href'))), base);
             for(let index = 0; index < links.length; index++) if(await !!bd.Checkdb(links[index])) await getinfo(links[index], page);
         
-            await sleep.sleep(10);
+            //await sleep.sleep(5);
             await listLinks(next, page);
         }
         else await restartApp();
@@ -57,14 +65,13 @@ async function restartApp(){
 }
 
 async function checkIP(page) {
-    return (await page.$('td > span.style4 > strong') === null);
+    return (await page.$('td > span.style4 > strong') === null); // undefined 
 }
 
 async function getinfo(url, page) {
     try {
-        page = await antBot(page);
+        page = await antBot(url, page);
         //await console.log('g', url);
-        await page.goto(url);
         if(checkIP){
             // image, empresa, produto
             try {
@@ -90,18 +97,18 @@ async function getinfo(url, page) {
                         peso,
                         veiculo,
                         carroceria,
-                        site: 'fretebras'
+                        anunciante: 'fretebras'
                     }
                     return info;
                 }, url);
                 await bd.Insertdb(info);   
             } 
-            catch (error) { await restartApp(); }
+            catch (error) { /*await restartApp();*/ }
         }
         else await restartApp();
     } 
     catch (error) { 
         await console.log('deu ruim',url, error); 
     }
-    await sleep.sleep(10);
+    //await sleep.sleep(5);
 }
